@@ -1,5 +1,5 @@
-const e = require("express")
-// const { getUserPosts } = require("../users/users-model")
+// const e = require("express")
+// // const { getUserPosts } = require("../users/users-model")
 const User = require("../users/users-model")
 
 function logger(req, res, next) {
@@ -19,10 +19,9 @@ async function validateUserId(req, res, next) {
   try {
     const user = await User.getById(req.params.id)
     if (!user) {
-      req.status(404).json({
-        message: "user not found"
-      })
-    } else {
+      next({ status: 404, message: 'user not found' })
+    }
+    else {
       req.user = user
       next()
     }
@@ -33,12 +32,12 @@ async function validateUserId(req, res, next) {
   }
 }
 
+
 function validateUser(req, res, next) {
 
-  // DO YOUR MAGIC
   const { name } = req.body
   if (!name || !name.trim()) {
-    req.status(400).json({
+    res.status(400).json({
       message: "missing required name field"
     })
   } else {
